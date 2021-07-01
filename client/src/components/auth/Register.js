@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 //import axios from "axios";
-import { Link } from 'react-router-dom';
-import { setAlert } from '../../actions/alert';
-import PropTypes from 'prop-types'
+import { Link, Redirect } from "react-router-dom";
+import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
+import PropTypes from "prop-types";
 
-
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,35 +22,35 @@ const Register = ({ setAlert }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert("Password do not match.", 'danger');
+      setAlert("Password do not match.", "danger");
     } else {
-    //   const newUser = {
-    //     name,
-    //     email,                           //Without using redux, sending the data to the backend.
-    //     password
-    //   };
+      //   const newUser = {
+      //     name,
+      //     email,                           //Without using redux, sending the data to the backend.
+      //     password
+      //   };
 
-    //   try {
-    //     const config = {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     };
+      //   try {
+      //     const config = {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     };
 
-    //     const body = JSON.stringify(newUser);
+      //     const body = JSON.stringify(newUser);
 
-    //     const res = await axios.post("/api/users", body, config);
-    //     console.log(res.data);
-    //   } catch (error) {
-    //     console.error(error.response.data);
-    //   }
-        try {
-            
-        } catch (error) {
-            console.log("SUCCESS");
-        }
+      //     const res = await axios.post("/api/users", body, config);
+      //     console.log(res.data);
+      //   } catch (error) {
+      //     console.error(error.response.data);
+      //   }
+      register({ name, email, password });
     }
   };
+
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
 
   return (
     <Fragment>
@@ -66,7 +66,7 @@ const Register = ({ setAlert }) => {
             name='name'
             value={name}
             onChange={(e) => onChange(e)}
-            required
+            //required
           />
         </div>
         <div className='form-group'>
@@ -76,7 +76,7 @@ const Register = ({ setAlert }) => {
             name='email'
             value={email}
             onChange={(e) => onChange(e)}
-            required
+            //required
           />
           <small className='form-text'>
             This site uses Gravatar so if you want a profile image, use a
@@ -90,8 +90,8 @@ const Register = ({ setAlert }) => {
             name='password'
             value={password}
             onChange={(e) => onChange(e)}
-            required
-            minLength='6'
+            //required
+            //minLength='6'
           />
         </div>
         <div className='form-group'>
@@ -101,8 +101,8 @@ const Register = ({ setAlert }) => {
             name='password2'
             value={password2}
             onChange={(e) => onChange(e)}
-            required
-            minLength='6'
+            // required
+            // minLength='6'
           />
         </div>
         <input type='submit' className='btn btn-primary' value='Register' />
@@ -114,8 +114,14 @@ const Register = ({ setAlert }) => {
   );
 };
 
-Register.propTypes = { 
-    setAlert: PropTypes.func.isRequired,
-}
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
 
-export default connect(null, {setAlert})(Register);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Register);
