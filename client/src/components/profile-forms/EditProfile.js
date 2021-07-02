@@ -148,6 +148,8 @@ const EditProfile = ({
             type='text'
             placeholder='Github Username'
             name='githubusername'
+            value={githubusername}
+            onChange={(e) => onChange(e)}
           />
           <small className='form-text'>
             If you want your latest repos and a Github link, include your

@@ -118,6 +118,17 @@ const CreateProfile = ({ createProfile, history }) => {
             Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
           </small>
         </div>
+
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Github Username"
+            name="githubusername"
+            value={githubusername}
+            onChange={onChange}
+          />
+        </div>  
+
         <div className='form-group'>
           <input
             type='text'
